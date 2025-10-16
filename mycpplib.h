@@ -41,5 +41,9 @@ class Mandel{
   double *_img;  // image buffer
 };
 
+class Count3D {
+public:
+    static long long count3d(int n); // static so we can call without instantiating
+};
   
 #endif // block to ensure header is only compiled once

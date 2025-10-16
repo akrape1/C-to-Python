@@ -75,7 +75,45 @@ void mandel(double *img, double re1, double re2, double im1, double im2,
   }
 }
 
-  
+// C++ version of count3d
+long long Count3D::count3d(int n){
+    long long count = 0;   // use long long for large n
+    for(int i = 0; i < n; ++i){
+        for(int j = i+1; j < n; ++j){
+            for(int k = j+1; k < n; ++k){
+                ++count;
+            }
+        }
+    }
+    return count;
+}
+
+extern "C" {
+    long long count3d_cpp(int n) {
+        return Count3D::count3d(n);
+    }
+}
+
+double HSVolume(int d, long long N, double r) {
+    if (d <= 0 || N <= 0 || r < 0.0) return 0.0;
+
+    srand48((long)time(NULL));
+    long long count = 0;
+    double r2 = r * r;
+
+    for (long long i = 0; i < N; ++i) {
+        double sumsq = 0.0;
+        for (int k = 0; k < d; ++k) {
+            double u = drand48();               // uniform in [0,1)
+            double coord = (2.0 * u - 1.0) * r; // uniform in [-r, r]
+            sumsq += coord * coord;
+        }
+        if (sumsq <= r2) ++count;
+    }
+
+    double cubeVol = pow(2.0 * r, d);
+    return cubeVol * (static_cast<double>(count) / static_cast<double>(N));
+}
 
 #ifdef EXTERNC
 }
